@@ -5,6 +5,7 @@ import { CheckInsRepository } from "../check-ins-repository";
 
 export class InMemoryCheckInsRepository implements CheckInsRepository{
  
+ 
   public items: CheckIN[] = []
 
   async findByUserIdOnDate(userId: string, date: Date){
@@ -37,5 +38,11 @@ export class InMemoryCheckInsRepository implements CheckInsRepository{
     this.items.push(checkIn)
 
     return checkIn
+  }
+
+  async findManyByUserId(userId: String, page:number){
+    return this.items.filter(item => item.userId === userId)
+    .slice((page - 1) * 20, page * 20)
+    
   }
 }
