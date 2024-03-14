@@ -1,8 +1,11 @@
+import { PrismaClient } from '@prisma/client'
 import 'dotenv/config'
 import { execSync } from 'node:child_process'
 import { randomUUID } from 'node:crypto'
 import { Environment } from 'vitest'
 //postgresql://docker:docker@localhost:5432/ignitenode03?schema=public
+
+const prisma = new PrismaClient()
 
 function generateDatabaseURL(schema:string){
   if (!process.env.DATABASE_URL){
@@ -27,7 +30,8 @@ export default <Environment>{
       execSync('npx prisma migrate deploy')
       return{
       async  teardown() {
-          console.log('teradown')
+          await prisma.$executeRawUnsafe(`DROP SCHEMA IF EXISTS "${schema}" CASCADE`,)
+          await prisma.$disconnect()
         },
       }
   },
