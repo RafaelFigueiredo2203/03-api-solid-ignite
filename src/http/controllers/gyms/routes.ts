@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { VeryJWT } from '@/http/middlewares/verify-jwt'
+import { verifyUserOnly } from '@/http/middlewares/verify-user-only'
 import { FastifyInstance } from 'fastify'
 import { createGym } from './create'
 import { nearbyGym } from './nearby'
@@ -12,5 +13,5 @@ export async function gymsRoutes(app: FastifyInstance) {
   
   app.get('/gyms/nearby',nearbyGym )
 
-  app.post('/gyms', createGym)
+  app.post('/gyms',{onRequest: [verifyUserOnly('ADMIN')]} ,createGym)
 }

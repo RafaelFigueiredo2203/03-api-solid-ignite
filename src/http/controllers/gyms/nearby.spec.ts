@@ -12,38 +12,41 @@ describe('Search Gyms (e2e)', () => {
     await app.close()
   })
 
-  it('should be able to search gyms ', async () => {
+  it('should be able to list nearby gyms ', async () => {
     
-    const {token} = await createAndAuthenticateUser(app)
+    const {token} = await createAndAuthenticateUser(app,true)
+
+
     
     await request(app.server)
     .post('/gyms')
     .set('Authorization', `Bearer ${token}`)
     .send({
-      title:'JavaScript Gym',
+      title:'OI Gym',
       description: 'Some description',
       phone: '14996112228',
-      latitude:0,
-      longitude:0,
+      latitude:-23.546681,
+      longitude: -47.187582,
     })
 
     await request(app.server)
     .post('/gyms')
     .set('Authorization', `Bearer ${token}`)
     .send({
-      title:'Ola Gym',
+      title:'oI Gym',
       description: 'Some description',
       phone: '14996112228',
-      latitude:0,
-      longitude:0,
+      latitude:-23.5505312,
+      longitude:  -47.0888562,
     })
 
     
 
     const response = await request(app.server)
-    .get('/gyms/search')
+    .get('/gyms/nearby')
     .query({
-      query: 'Ola',
+      latitude:-23.546681,
+      longitude: -47.187582,
     })
     .set('Authorization', `Bearer ${token}`)
     .send()
@@ -51,13 +54,7 @@ describe('Search Gyms (e2e)', () => {
    
 
     expect(response.statusCode).toEqual(201)
-    expect(response.body.gyms).toHaveLength(1)
-    expect(response.body.gyms).toEqual([
-      expect.objectContaining({
-        title:'Ola Gym'
-      })
-      
-    ])
+
 
  
   

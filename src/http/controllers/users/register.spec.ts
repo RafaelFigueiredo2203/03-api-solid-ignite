@@ -15,8 +15,8 @@ describe('register (e2e)', () => {
     const response = await request(app.server)
     .post('/users')
     .send({
-      name:'Johnnn Doee',
-      email:'johnnndoee@example.com',
+      name:'Joh Doee',
+      email:'johnnndojljeehn@example.com',
       password:'123456',
     })
 

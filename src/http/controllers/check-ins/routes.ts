@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { VeryJWT } from '@/http/middlewares/verify-jwt'
+import { verifyUserOnly } from '@/http/middlewares/verify-user-only'
 import { FastifyInstance } from 'fastify'
 import { createGym } from '../gyms/create'
 import { history } from './history'
@@ -15,5 +16,5 @@ export async function checkInsRoutes(app: FastifyInstance) {
 
   app.post('/gyms/:gymId/check-ins',createGym)
 
-  app.patch('/check-ins/:checkInId/validate', validate)
+  app.patch('/check-ins/:checkInId/validate',{onRequest:[verifyUserOnly('ADMIN')]}, validate)
 }
